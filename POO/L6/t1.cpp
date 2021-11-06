@@ -1,7 +1,7 @@
 //Am folosit sets in loc de liste stl deoarece sunt mult mai potrivite pentru problema propusa
 
 #include<iostream>
-#include<string>
+#include<string.h>
 #include<set>
 #include<iterator>
 
@@ -19,9 +19,6 @@ class persoana{
 
         void printPers() const{
             std :: cout<<"Nume: "<<nume<<"\nVarsta: "<<varsta<<"\n";
-        }
-        std :: string getName() const{
-            return this->nume;
         }
 };
 
@@ -54,8 +51,11 @@ class copil : public elev , public persoana{
             this->PrintElev();
             std :: cout<<"Joc preferat: "<<joc<<"\n";
         }
+        std :: string getGame() const{
+            return joc;
+        }
 
-    bool operator<(const copil& other) const{
+    bool operator<(const copil& other) const{  //overloading operator
         if(this->nume < other.nume)
             return true;
         else
@@ -77,7 +77,7 @@ bool cmp(const copil& a,const copil& b)
         return a_name < b_name;
 }
 
-setting the new function as compare fct
+//setting the new function as compare fct
 std :: set<copil, decltype(cmp)*> s(cmp);
 */
 
@@ -86,7 +86,7 @@ namespace std {
 void addSorted(set <copil> *l)
     {
     string name,age,school,grade,game;
-
+    getline(cin,name);
     cout<<"Nume: ";
     getline(cin, name); 
     cout<<"Varsta: ";
@@ -113,15 +113,41 @@ void printSet(std :: set <copil> l)
     }
 }
 
+void search(std :: set<copil> l, std :: string token)
+{
+    //can only use lin search because elements are unsorted
+    for(auto const &it : l){
+        if(it.getGame() == token)
+            it.printCopil();
+    }
+}
 
 int main()
 {
     std :: set <copil> l;
+    int opt;
+    std :: string tok;
 
-    std :: addSorted(&l);
-    std :: addSorted(&l);
+    do{
+        std :: cout<<"0.Iesire\n1.Adaugare\n2.Afisare\n3.Cautare\nAlegeti opt:";
+        std :: cin>>opt;
+        switch(opt){
+            case 1:
+                std :: addSorted(&l);
+            break;
+            
+            case 2:
+                printSet(l);
+            break;
 
-    printSet(l);
+            case 3:
+                std :: cout<<"Jocul preferat: ";
+                std :: cin>>tok;
+                search(l,tok);
+            break;
+        }   
+    }while(opt!=0);
+
 
     return 0;
 }
